@@ -1,0 +1,71 @@
+Import('env')
+
+# ---------------------------------------------------------------
+
+name = 'dso_usdgeometry'
+target = 'UsdGeometry.so'
+sources = ['UsdGeometry.cc']
+components = [
+    'rendering_geom',
+    'scene_rdl2',
+    'usd_core',
+    'geometry_usd'
+]
+
+def addFlag(flag):
+    env.AppendUnique(CXXFLAGS=[flag])
+
+# The usd library issues these warnings and remarks
+# when compiled with icc.   We supress them to not
+# clutter the output.
+if 'icc' in env['CC']:
+    # Disable warning #1224 (depricated header)
+    addFlag('-Wno-deprecated')
+
+    # Disable warning #1684 (conversion from pointer to same-sized integral type)
+    # results in build errors even for reinterpret_cast
+    addFlag('-wd1684')
+
+    # Disable warning #2282 (unrecognized GCC pragma)
+    addFlag('-wd2282')
+
+    # Disable warning #3280 (declaration hides member)
+    # Same as GCC's -Wshadow option, this is too strict and errors on
+    # perfectly legal C++ idioms (e.g. getter/setter named after member
+    # variable)
+    addFlag('-wd3280')
+
+    # Disable warning #3373 (nonstandard use of "auto" to both deduce the type
+    # from an initializer and to announce a trailing return type)
+    addFlag('-wd3373')
+    
+    # Disable warning #1 (last line of file ends without a newline)
+    addFlag('-wd1')
+
+    # Disable warning #82 (storage class is not first)
+    addFlag('-wd82')
+
+    # Disable warning #177 (variable declared but not referenced)
+    # GCC does not produce this warning.
+    # Disabled to allow prototype code to assign calculated (but not yet used)
+    # values to local variables. Probably should be re-enabled for production code    
+    addFlag('-wd177')
+
+    # Disable warning #304 (access control not specified ("private" by default))
+    addFlag('-wd304')
+
+    # Disable warning #444 (base class with non-virtual dtor) 
+    addFlag('-wd444')
+
+    # Don't error on "redeclared "inline" after being called"
+    addFlag('-wd522')
+
+    # Disable warning #2203 cast discards qualifiers from target type usd_core 0.20.11
+    addFlag('-wd2203')
+
+# ---------------------------------------------------------------
+
+env.DWAUseComponents(components)
+dso = env.DWARdl2Dso(env.File(target), sources, TEST_DSO=True)
+env.DWAInstallRdl2Dso(dso)
+env.DWAComponent(name, COMPONENTS=components)
