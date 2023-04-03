@@ -14,8 +14,6 @@ RDL2_DSO_ATTR_DECLARE
     scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Bool>         attrUseMasterXform;
     scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Bool>         attrUseStageCache;
 
-    scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Bool>         attrUseEvaluationFrame;
-    scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Float>        attrEvaluationFrame;
     scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Int>          attrSubdType;
     scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Float>        attrRadiusMult;
     scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Float>        attrBaseWidthFactor;
@@ -27,30 +25,35 @@ RDL2_DSO_ATTR_DECLARE
     DECLARE_COMMON_CURVES_ATTRIBUTES
     DECLARE_COMMON_MESH_ATTRIBUTES
     DECLARE_COMMON_MOTION_BLUR_ATTRIBUTES
+    DECLARE_COMMON_EVALUATION_FRAME_ATTRIBUTES
 
 RDL2_DSO_ATTR_DEFINE(scene_rdl2::rdl2::Geometry)
 
     attrStage =
         sceneClass.declareAttribute<scene_rdl2::rdl2::String>("stage", "", scene_rdl2::rdl2::FLAGS_FILENAME);
     sceneClass.setMetadata(attrStage, "label", "stage");
-    sceneClass.setMetadata(attrStage, "comment", "USD Stage to load\n");
+    sceneClass.setMetadata(attrStage, "comment", "USD Stage to load");
+    sceneClass.setGroup("USD", attrStage);
 
     attrPrimPath =
         sceneClass.declareAttribute<scene_rdl2::rdl2::String>("prim_path", "");
     sceneClass.setMetadata(attrPrimPath, "label", "prim path");
-    sceneClass.setMetadata(attrPrimPath, "comment", "The geometry Prim to load from the USD Stage\n");
+    sceneClass.setMetadata(attrPrimPath, "comment", "The geometry Prim to load from the USD Stage");
+    sceneClass.setGroup("USD", attrPrimPath);
 
     attrUsePrimXform =
         sceneClass.declareAttribute<scene_rdl2::rdl2::Bool>("use_prim_xform", true, { "use prim xform" });
     sceneClass.setMetadata(attrUsePrimXform, "label", "use prim xform");
     sceneClass.setMetadata(attrUsePrimXform, "comment",
-        "Include the xform from the Prim during geometry creation\n");
+        "Include the xform from the Prim during geometry creation");
+    sceneClass.setGroup("USD", attrUsePrimXform);
 
     attrUseMasterXform =
         sceneClass.declareAttribute<scene_rdl2::rdl2::Bool>("use_master_xform", false, { "use master xform" });
     sceneClass.setMetadata(attrUseMasterXform, "label", "use master xform");
     sceneClass.setMetadata(attrUseMasterXform, "comment",
-        "If the prim is an instance proxy, use the xform from the master Prim during geometry creation\n");
+        "If the prim is an instance proxy, use the xform from the master Prim during geometry creation");
+    sceneClass.setGroup("USD", attrUseMasterXform);
 
     attrUseStageCache =
     sceneClass.declareAttribute<scene_rdl2::rdl2::Bool>("use_stage_cache", false, { "use stage cache" });
@@ -58,19 +61,8 @@ RDL2_DSO_ATTR_DEFINE(scene_rdl2::rdl2::Geometry)
     sceneClass.setMetadata(attrUseStageCache, "comment",
         "Load the entire stage and use StageCache to share it among all UsdGeometry objects.\n"
         "If this is false, load a stage masked to the prim path just for this UsdGeometry.\n"
-        "For large stages with thousands of unique assets, it is faster to enable the stage cache\n");
-
-    attrUseEvaluationFrame =
-        sceneClass.declareAttribute<scene_rdl2::rdl2::Bool>("use_evaluation_frame", false, { "use evaluation frame" });
-    sceneClass.setMetadata(attrUseEvaluationFrame, "label", "use evaluation frame");
-    sceneClass.setMetadata(attrUseEvaluationFrame, "comment",
-        "uses \"evaluation frame\" instead of SceneVariables frame\n");
-
-    attrEvaluationFrame =
-        sceneClass.declareAttribute<scene_rdl2::rdl2::Float>("evaluation_frame", 1, { "evaluation frame" });
-    sceneClass.setMetadata(attrEvaluationFrame, "label", "evaluation frame");
-    sceneClass.setMetadata(attrEvaluationFrame, "comment",
-        "evaluate geometry at specified frame instead of SceneVariables frame\n");
+        "For large stages with thousands of unique assets, it is faster to enable the stage cache");
+    sceneClass.setGroup("USD", attrUseStageCache);
 
     attrSubdType =
         sceneClass.declareAttribute<scene_rdl2::rdl2::Int>("subd_type", 0,
@@ -83,25 +75,29 @@ RDL2_DSO_ATTR_DEFINE(scene_rdl2::rdl2::Geometry)
         "PolygonMesh/SubdivisionMesh prim type to create.\n"
         "\"use mesh type\" will use the type the Mesh prim specifies.\n"
         "\"force polygon mesh\" will always resolve to PolygonMesh.\n"
-        "\"force subdivision mesh\" will always resolve to SubdivisionMesh.\n");
+        "\"force subdivision mesh\" will always resolve to SubdivisionMesh.");
+    sceneClass.setGroup("Mesh", attrSubdType);
 
     attrRadiusMult =
         sceneClass.declareAttribute<scene_rdl2::rdl2::Float>("radius_mult", 1.0f, { "radius mult", "point scale", "point_scale" });
     sceneClass.setMetadata(attrRadiusMult, "label", "radius mult");
     sceneClass.setMetadata(attrRadiusMult, "comment",
-        "radius multiplier for points and curves");
+        "Multiplier for the radius of points and curves");
+    sceneClass.setGroup("Curve", attrRadiusMult);
 
     attrBaseWidthFactor =
         sceneClass.declareAttribute<scene_rdl2::rdl2::Float>("base_width_factor", 1.0f, { "base width factor" });
     sceneClass.setMetadata(attrBaseWidthFactor, "label", "base width factor");
     sceneClass.setMetadata(attrBaseWidthFactor, "comment",
             "Multiplier for the radius of the base of curves");
+    sceneClass.setGroup("Curve", attrBaseWidthFactor);
 
     attrTipWidthFactor =
         sceneClass.declareAttribute<scene_rdl2::rdl2::Float>("tip_width_factor", 1.0f, { "tip width factor" });
     sceneClass.setMetadata(attrTipWidthFactor, "label", "tip width factor");
     sceneClass.setMetadata(attrTipWidthFactor, "comment",
             "Multiplier for the radius of the tip of curves");
+    sceneClass.setGroup("Curve", attrTipWidthFactor);
 
     attrCurvesSubType =
         sceneClass.declareAttribute<scene_rdl2::rdl2::Int>("curves_subtype", 0, scene_rdl2::rdl2::FLAGS_ENUMERABLE);
@@ -109,12 +105,14 @@ RDL2_DSO_ATTR_DEFINE(scene_rdl2::rdl2::Geometry)
     sceneClass.setEnumValue(attrCurvesSubType, 0, "ray_facing");
     sceneClass.setEnumValue(attrCurvesSubType, 1, "round");
     sceneClass.setMetadata (attrCurvesSubType, "comment",
-        "Curves subtype is ray facing or round");
+        "Set the style that curve primitives are rendered in");
+    sceneClass.setGroup("Curve", attrCurvesSubType);
 
     DEFINE_COMMON_USER_DATA_ATTRIBUTES
     DEFINE_COMMON_CURVES_ATTRIBUTES
     DEFINE_COMMON_MESH_ATTRIBUTES
     DEFINE_COMMON_MOTION_BLUR_ATTRIBUTES
+    DEFINE_COMMON_EVALUATION_FRAME_ATTRIBUTES
 
 
 RDL2_DSO_ATTR_END
