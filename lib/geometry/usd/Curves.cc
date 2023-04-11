@@ -357,12 +357,12 @@ createCurves(const scene_rdl2::rdl2::Geometry *rdlGeometry,
 
     std::unique_ptr<Curves> primitive =
         moonray::geom::createCurves(curvesType,
-                                  commonAttrs.curvesSubType,
-                                  commonAttrs.tessellationRate,
-                                  std::move(curveVertexCounts),
-                                  std::move(vertices),
-                                  std::move(layerAssignmentId),
-                                  std::move(primitiveAttributeTable));
+                                    commonAttrs.curvesSubType,
+                                    commonAttrs.tessellationRate,
+                                    std::move(curveVertexCounts),
+                                    std::move(vertices),
+                                    std::move(layerAssignmentId),
+                                    std::move(primitiveAttributeTable));
 
     if (primitive) {
         primitive->setName(curvesName);

@@ -19,8 +19,6 @@ RDL2_DSO_ATTR_DECLARE
     scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Float>        attrBaseWidthFactor;
     scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Float>        attrTipWidthFactor;
 
-    scene_rdl2::rdl2::AttributeKey<scene_rdl2::rdl2::Int>          attrCurvesSubType;
-
     DECLARE_COMMON_USER_DATA_ATTRIBUTES
     DECLARE_COMMON_CURVES_ATTRIBUTES
     DECLARE_COMMON_MESH_ATTRIBUTES
@@ -98,15 +96,6 @@ RDL2_DSO_ATTR_DEFINE(scene_rdl2::rdl2::Geometry)
     sceneClass.setMetadata(attrTipWidthFactor, "comment",
             "Multiplier for the radius of the tip of curves");
     sceneClass.setGroup("Curve", attrTipWidthFactor);
-
-    attrCurvesSubType =
-        sceneClass.declareAttribute<scene_rdl2::rdl2::Int>("curves_subtype", 0, scene_rdl2::rdl2::FLAGS_ENUMERABLE);
-    sceneClass.setMetadata(attrCurvesSubType, "label", "curves subtype");
-    sceneClass.setEnumValue(attrCurvesSubType, 0, "ray_facing");
-    sceneClass.setEnumValue(attrCurvesSubType, 1, "round");
-    sceneClass.setMetadata (attrCurvesSubType, "comment",
-        "Set the style that curve primitives are rendered in");
-    sceneClass.setGroup("Curve", attrCurvesSubType);
 
     DEFINE_COMMON_USER_DATA_ATTRIBUTES
     DEFINE_COMMON_CURVES_ATTRIBUTES

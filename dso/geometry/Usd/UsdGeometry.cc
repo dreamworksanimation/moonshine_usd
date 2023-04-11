@@ -486,6 +486,9 @@ UsdGeometryProcedural::generate(
     case 1:
         curvesSubType = Curves::SubType::ROUND;
         break;
+    case 2:
+        curvesSubType = Curves::SubType::NORMAL_ORIENTED;
+        break;
     default:
         rdlGeometry->warn("Unknown curve subtype, defaulting to ray facing.");
         curvesSubType = Curves::SubType::RAY_FACING;
