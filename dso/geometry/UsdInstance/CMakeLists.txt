@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 moonray_dso_simple(UsdInstanceGeometry
-    TEST_DSO
     DEPENDENCIES
         Moonray::rendering_bvh_shading
         ${PROJECT_NAME}::geometry_usd

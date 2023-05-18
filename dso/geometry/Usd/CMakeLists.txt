@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 moonray_dso_simple(UsdGeometry
-    TEST_DSO
     DEPENDENCIES
         Moonray::rendering_geom
         ${PROJECT_NAME}::geometry_usd

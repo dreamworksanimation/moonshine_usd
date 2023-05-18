@@ -66,6 +66,6 @@ if 'icc' in env['CC']:
 # ---------------------------------------------------------------
 
 env.DWAUseComponents(components)
-dso = env.DWARdl2Dso(env.File(target), sources, TEST_DSO=True)
+dso = env.DWARdl2Dso(env.File(target), sources)
 env.DWAInstallRdl2Dso(dso)
 env.DWAComponent(name, COMPONENTS=components)
