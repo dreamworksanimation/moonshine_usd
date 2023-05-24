@@ -507,6 +507,7 @@ UsdGeometryProcedural::generate(
         static_cast<scene_rdl2::rdl2::PrimitiveAttributeFrame>(usdGeometry->get(attrPrimitiveAttributeFrame));
     commonAttrs.curvesSubType = curvesSubType;
     commonAttrs.tessellationRate = usdGeometry->get(attrTessellationRate);
+    commonAttrs.explicitShading = usdGeometry->get(attrExplicitShading);
 
     const scene_rdl2::rdl2::Layer *rdlLayer = generateContext.getRdlLayer();
     const float currentFrame = generateContext.getCurrentFrame();

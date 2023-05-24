@@ -100,16 +100,17 @@ pointsExtractTextureUV(const scene_rdl2::rdl2::Geometry *rdlGeometry,
                        PrimitiveAttributeTable& primitiveAttributeTable,
                        std::vector<float>& motionFrames)
 {
-    std::vector< std::vector<scene_rdl2::math::Vec3f> > textureUV;
+    std::vector< std::vector<scene_rdl2::math::Vec2f> > textureUV;
     AttributeRate rate;
-    if (!moonshine::usd::getPrimvarVector<scene_rdl2::math::Vec3f, GfVec3f, UsdGeomPoints>(rdlGeometry,
-                                                                               points,
-                                                                               StandardAttributes::sUv,
-                                                                               motionFrames,
-                                                                               rate,
-                                                                               textureUV)) {
+    if (!moonshine::usd::getPrimvarVector<scene_rdl2::math::Vec2f, GfVec2f, UsdGeomPoints>(rdlGeometry,
+                                                                                           points,
+                                                                                           StandardAttributes::sUv,
+                                                                                           motionFrames,
+                                                                                           rate,
+                                                                                           textureUV)) {
         return;
     }
+
 
     primitiveAttributeTable.addAttribute(StandardAttributes::sUv,
                                          rate,
@@ -282,6 +283,14 @@ createPoints(const scene_rdl2::rdl2::Geometry *rdlGeometry,
                               useFirstFrame,
                               useSecondFrame,
                               primitiveAttributeTable);
+
+    // Add explicit shading primitive attribute if it's enabled
+    if (commonAttrs.explicitShading &&
+        !addExplicitShading(rdlGeometry, primitiveAttributeTable)) {
+
+        return nullptr;
+    }
+
 
     std::unique_ptr<Points> primitive =
         createPoints(std::move(positions),

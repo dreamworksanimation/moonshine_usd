@@ -603,7 +603,7 @@ UsdInstanceGeometryProcedural::generate(const GenerateContext& generateContext,
             // Only adding shadow_ray_epsilon for now
             // MOONRAY-4313 - Propagate common geometry attributes to instanced primitives
             std::vector<float> refShadowRayEpsilon = { refShadowRayEpsilons[index] };
-            instancePAT.addAttribute(moonray::shading::StandardAttributes::sShadowRayEpsilon,
+            instancePAT.addAttribute(StandardAttributes::sShadowRayEpsilon,
                                      RATE_CONSTANT,
                                      std::move(refShadowRayEpsilon));
         }
@@ -611,6 +611,12 @@ UsdInstanceGeometryProcedural::generate(const GenerateContext& generateContext,
         // Add the requested primitive attributes as constant by
         // copying the value from the pointsPAT
         transferPrimitiveAttributes(pointsPAT, instancePAT, i);
+
+        // Add explicit shading primitive attribute if it's enabled
+        if (usdInstanceGeometry->get(attrExplicitShading) &&
+            !addExplicitShading(rdlGeometry, instancePAT)) {
+            continue;
+        }
 
         // Add rdla primitive attributes
         for (const auto& kv : attrMap) {

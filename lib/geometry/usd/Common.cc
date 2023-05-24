@@ -395,13 +395,13 @@ addPointInstancerUVs(const scene_rdl2::rdl2::Geometry *rdlGeometry,
         return;
     }
 
-    std::vector<scene_rdl2::math::Vec3f> textureUV;
-    getPointInstancerPrimvarVectorData<scene_rdl2::math::Vec3f, GfVec3f>(rdlGeometry,
-                                                             primvar,
-                                                             StandardAttributes::sUv,
-                                                             motionFrames,
-                                                             attrRate,
-                                                             textureUV);
+    std::vector<scene_rdl2::math::Vec2f> textureUV;
+    getPointInstancerPrimvarVectorData<scene_rdl2::math::Vec2f, GfVec2f>(rdlGeometry,
+                                                                         primvar,
+                                                                         StandardAttributes::sUv,
+                                                                         motionFrames,
+                                                                         attrRate,
+                                                                         textureUV);
 
     table.addAttribute(StandardAttributes::sUv,
                        attrRate,
@@ -414,10 +414,21 @@ addPointInstancerNormals(const scene_rdl2::rdl2::Geometry *rdlGeometry,
                          PrimitiveAttributeTable& table,
                          const std::vector<float>& motionFrames)
 {
+    // Check for alternate "N" naming
+    TypedAttributeKey<scene_rdl2::math::Vec3f> normalKey = StandardAttributes::sNormal;
+    const UsdGeomPrimvarsAPI pvAPI(pointInstancer.GetPrim());
+    if (!pvAPI.HasPrimvar(TfToken(StandardAttributes::sNormal.getName()))) {
+        if (pvAPI.HasPrimvar(TfToken("N"))) {
+            normalKey = TypedAttributeKey<scene_rdl2::math::Vec3f>("N");
+        } else {
+            return;
+        }
+    }
+
     UsdGeomPrimvar primvar;
     if (!getPrimvar<UsdGeomPointInstancer>(rdlGeometry,
                                            pointInstancer,
-                                           StandardAttributes::sNormal,
+                                           normalKey,
                                            primvar,
                                            motionFrames)) {
         return;
@@ -426,7 +437,7 @@ addPointInstancerNormals(const scene_rdl2::rdl2::Geometry *rdlGeometry,
     AttributeRate attrRate;
     if (!getPrimvarRate(rdlGeometry,
                         primvar,
-                        StandardAttributes::sNormal,
+                        normalKey,
                         attrRate)) {
         return;
     }
@@ -434,7 +445,7 @@ addPointInstancerNormals(const scene_rdl2::rdl2::Geometry *rdlGeometry,
     std::vector<scene_rdl2::math::Vec3f> normals;
     getPointInstancerPrimvarVectorData<scene_rdl2::math::Vec3f, GfVec3f>(rdlGeometry,
                                                              primvar,
-                                                             StandardAttributes::sNormal,
+                                                             normalKey,
                                                              motionFrames,
                                                              attrRate,
                                                              normals);
@@ -503,8 +514,6 @@ addPointInstancerDerivatives(const scene_rdl2::rdl2::Geometry *rdlGeometry,
             scene_rdl2::math::isZero(dPds[i])) {
                 throw std::runtime_error("Invalid dPds on points");
         }
-
-        dPds[i] = scene_rdl2::math::normalize(dPds[i]);
     }
 
     table.addAttribute(StandardAttributes::sdPds,
@@ -546,8 +555,6 @@ addPointInstancerDerivatives(const scene_rdl2::rdl2::Geometry *rdlGeometry,
             scene_rdl2::math::isZero(dPdt[i])) {
                 throw std::runtime_error("Invalid dPdt on points");
         }
-
-        dPdt[i] = scene_rdl2::math::normalize(dPdt[i]);
     }
 
     table.addAttribute(StandardAttributes::sdPdt,
@@ -757,7 +764,6 @@ getVertices<UsdGeomPoints>(const scene_rdl2::rdl2::Geometry *rdlGeometry,
                            PrimitiveAttributeTable& table,
                            scene_rdl2::rdl2::MotionBlurType mbType,
                            const std::vector<float>& motionFrames);
-
 
 } // namespace usd
 } // namespace moonshine

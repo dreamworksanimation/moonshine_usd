@@ -52,6 +52,7 @@ struct CommonAttrs {
     scene_rdl2::rdl2::PrimitiveAttributeFrame primitiveAttributeFrame;
     Curves::SubType curvesSubType;
     int tessellationRate;
+    bool explicitShading;
 
     CommonAttrs()
         : useEvaluationFrame(false)
@@ -62,6 +63,7 @@ struct CommonAttrs {
         , primitiveAttributeFrame(scene_rdl2::rdl2::PrimitiveAttributeFrame::BOTH_MOTION_STEPS)
         , curvesSubType(Curves::SubType::UNKNOWN)
         , tessellationRate(4)
+        , explicitShading(false)
     {}
 };
 
@@ -499,7 +501,6 @@ finline expandSkelMask(const UsdRelationship& rel)
 {
     return rel.GetNamespace() == SKEL;
 }
-
 
 } // namespace usd
 } // namespace moonshine

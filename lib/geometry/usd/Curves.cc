@@ -355,6 +355,13 @@ createCurves(const scene_rdl2::rdl2::Geometry *rdlGeometry,
                               useSecondFrame,
                               primitiveAttributeTable);
 
+    // Add explicit shading primitive attribute if it's enabled
+    if (commonAttrs.explicitShading &&
+        !addExplicitShading(rdlGeometry, primitiveAttributeTable)) {
+
+        return nullptr;
+    }
+
     std::unique_ptr<Curves> primitive =
         moonray::geom::createCurves(curvesType,
                                     commonAttrs.curvesSubType,
