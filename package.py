@@ -37,6 +37,17 @@ else:
     build_system_pbr = 'cmake_modules'
 
 variants = [
+    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.21.8.x.2'],
+    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.21.8.x.2'],
+
+    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2021.0', 'clang-13', 'gcc-9.3.x.1', 'usd_core-0.21.8.x.2'],
+
+    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
+    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
+
+    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
+    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
+
     ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2020.3', 'icc-19.0.5.281.x.2', 'usd_core-0.20.8.x.2'],
     ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2020.3', 'icc-19.0.5.281.x.2', 'usd_core-0.20.8.x.2'],
     ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2020.3', 'gcc-6.3.x.2', 'usd_core-0.20.8.x.2'],
@@ -52,19 +63,18 @@ variants = [
     ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2020.3', 'gcc-6.3.x.2', 'usd_core-0.21.8.x.2'],
     ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2020.3', 'gcc-6.3.x.2', 'usd_core-0.21.8.x.2'],
 
-    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.21.8.x.2'],
-    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.21.8.x.2'],
+    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.21.8.x.2'],
+    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.21.8.x.2'],
 
-    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2021.0', 'clang-13', 'gcc-9.3.x.1', 'usd_core-0.21.8.x.2'],
+    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
+    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
 
-    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
-    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
-
-    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
-    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
+    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
+    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
 ]
 
 conf_rats_variants = variants[0:2]
+conf_CI_variants = list(filter(lambda v: 'os-CentOS-7' in v, variants))
 
 scons_targets = ['@install'] + unittestflags
 proxy_targets = ['@rdl2proxy', '@install_SConscript']
