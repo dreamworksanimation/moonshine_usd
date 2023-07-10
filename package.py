@@ -95,7 +95,7 @@ private_build_requires = [
     build_system_pbr,
     'usd_imaging',
     'cppunit',
-    'ispc-1.14.1.x',
+    'ispc-1.20.0.x',
 ]
 
 commandstr = lambda i: "cd build/"+os.path.join(*variants[i])+"; ctest -j $(nproc)"
