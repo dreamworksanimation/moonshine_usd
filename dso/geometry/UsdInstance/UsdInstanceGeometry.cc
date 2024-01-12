@@ -1,4 +1,4 @@
-// Copyright 2023 DreamWorks Animation LLC
+// Copyright 2023-2024 DreamWorks Animation LLC
 // SPDX-License-Identifier: Apache-2.0
 
 //  UsdInstanceGeometry is a procedural that can generate one or more Moonray
