@@ -285,7 +285,7 @@ addPrimvar(const scene_rdl2::rdl2::Geometry *rdlGeometry,
         setStaticPrimvar<int>(primvar, table, frame, rdlAttrKey, attrRate);
         break;
     case scene_rdl2::rdl2::TYPE_LONG:
-        setStaticPrimvar<long>(primvar, table, frame, rdlAttrKey, attrRate);
+        setStaticPrimvar<int64_t>(primvar, table, frame, rdlAttrKey, attrRate);
         break;
     case scene_rdl2::rdl2::TYPE_FLOAT:
         setPrimvar<float, float, GeomType>(rdlGeometry, usdGeometry, primvar, table, motionFrames, rdlAttrKey, attrRate);
@@ -344,7 +344,7 @@ addPointInstancerPrimvar(const scene_rdl2::rdl2::Geometry *rdlGeometry,
         setStaticPrimvar<int>(primvar, table, frame, rdlAttrKey, attrRate);
         break;
     case scene_rdl2::rdl2::TYPE_LONG:
-        setStaticPrimvar<long>(primvar, table, frame, rdlAttrKey, attrRate);
+        setStaticPrimvar<int64_t>(primvar, table, frame, rdlAttrKey, attrRate);
         break;
     case scene_rdl2::rdl2::TYPE_FLOAT:
         setPointInstancerPrimvar<float, float>(rdlGeometry, primvar, table, motionFrames, rdlAttrKey, attrRate);

@@ -32,6 +32,11 @@ target_include_directories(${component}
         $<INSTALL_INTERFACE:include>
 )
 
+target_compile_definitions(${component}
+    PUBLIC 
+       # Need std::unary_functions
+       _LIBCPP_ENABLE_CXX17_REMOVED_FEATURES=1) 
+
 target_link_libraries(${component}
     PUBLIC
         Moonray::rendering_geom
