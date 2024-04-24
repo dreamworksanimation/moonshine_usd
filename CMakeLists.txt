@@ -79,11 +79,9 @@ if("${PROJECT_NAME}" STREQUAL "${CMAKE_PROJECT_NAME}")
     find_package(SceneRdl2 REQUIRED)
 endif()
 
-# ================================================
 # Set the RPATH for binaries in the install tree
-# ================================================
 set(CMAKE_BUILD_RPATH ${COMPILER_LIBRARY_DIR})
-set(CMAKE_INSTALL_RPATH $ORIGIN $ORIGIN/../lib64 ${COMPILER_LIBRARY_DIR})
+set(CMAKE_INSTALL_RPATH ${GLOBAL_INSTALL_RPATH})
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # ===============================================
