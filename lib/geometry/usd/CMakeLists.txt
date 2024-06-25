@@ -62,6 +62,14 @@ MoonshineUsd_cxx_compile_features(${component})
 MoonshineUsd_cxx_compile_options(${component})
 MoonshineUsd_link_options(${component})
 
+if (IsDarwinPlatform)
+    # We need to add an rpath for the Python framework, as the default
+    # is not correct.  Luckily CMake's FindPython module provides the
+    # options we need,
+    # see https://cmake.org/cmake/help/latest/release/3.19.html#modules
+    target_link_options(${component} PUBLIC ${Python_LINK_OPTIONS})
+endif()
+
 # -------------------------------------
 # Install the target and the export set
 # -------------------------------------

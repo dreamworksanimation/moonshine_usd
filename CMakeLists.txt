@@ -30,19 +30,19 @@ else()
     message(STATUS "No ISPC support")
 endif()
 
-option(MOONRAY_DWA_BUILD                    "Whether to enable DWA-specific features" NO)
+# ================================================
+# Options
+# ================================================
+option(${PROJECT_NAME_UPPER}_BUILD_TESTING
+    "Whether or not to build the unittests" YES)
+option(${PROJECT_NAME_UPPER}_DWA_BUILD
+    "Whether to enable DWA-specific features" NO)
 
 # Ideally MOONRAY_DWA_BUILD should be set to YES externally (e.g. by rez-build), but this
 # is a fallback to enable it if STUDIO=GLD...
 if(GLD STREQUAL "$ENV{STUDIO}")
     set(MOONRAY_DWA_BUILD YES)
 endif()
-
-# ================================================
-# Options
-# ================================================
-option(${PROJECT_NAME_UPPER}_BUILD_TESTING
-    "Whether or not to build the unittests" YES)
 
 option(ABI_SET_VERSION "Enable the abi-version option" OFF)
 if(ABI_SET_VERSION)
@@ -79,7 +79,6 @@ if("${PROJECT_NAME}" STREQUAL "${CMAKE_PROJECT_NAME}")
     find_package(SceneRdl2 REQUIRED)
 endif()
 
-# ================================================
 # Set the RPATH for binaries in the install tree
 # ================================================
 if (NOT "" STREQUAL "$ENV{REZ_ICC_ROOT}")
@@ -87,7 +86,7 @@ if (NOT "" STREQUAL "$ENV{REZ_ICC_ROOT}")
 endif()
 
 set(CMAKE_BUILD_RPATH ${COMPILER_LIBRARY_DIR})
-set(CMAKE_INSTALL_RPATH $ORIGIN $ORIGIN/../lib64 ${COMPILER_LIBRARY_DIR})
+set(CMAKE_INSTALL_RPATH ${GLOBAL_INSTALL_RPATH})
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # ===============================================
@@ -133,6 +132,12 @@ if(GLD STREQUAL "$ENV{STUDIO}")
     file(WRITE ${CMAKE_BINARY_DIR}/SDKScript ${SDKScript_template})
     install(FILES ${CMAKE_BINARY_DIR}/SDKScript DESTINATION .)
 endif()
+
+# if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR ${PROJECT_NAME_UPPER}_BUILD_TESTING)
+        # AND BUILD_TESTING)
+    # find_package(CppUnit REQUIRED)
+    # add_subdirectory(tests)
+# endif()
 
 # ================================================
 # Install
