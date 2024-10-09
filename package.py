@@ -50,10 +50,10 @@ variants = [
     ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
     ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'usd_core-0.22.5.x'],
 
-    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2023.0', 'gcc-11.x', 'usd_core-0.22.5.x'],
-    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2023.0', 'gcc-11.x', 'usd_core-0.22.5.x'],
-    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2023.0', 'clang-17.0.6.x', 'usd_core-0.22.5.x'],
-#    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2023.0', 'clang-17.0.6.x', 'usd_core-0.22.5.x'],
+    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2023.1', 'gcc-11.x', 'usd_core-0.22.5.x'],
+    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2023.1', 'gcc-11.x', 'usd_core-0.22.5.x'],
+    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2023.1', 'clang-17.0.6.x', 'usd_core-0.22.5.x'],
+#    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2023.1', 'clang-17.0.6.x', 'usd_core-0.22.5.x'],
 ]
 
 conf_rats_variants = variants[0:2]
