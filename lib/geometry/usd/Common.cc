@@ -87,7 +87,7 @@ getMotionBlurType(const GeomType& usdGeometry,
             break;
 
         case scene_rdl2::rdl2::MotionBlurType::ACCELERATION:
-            if (numMotionFrames >= 2  &&  usdGeometry.GetVelocitiesAttr().ValueMightBeTimeVarying()
+            if (numMotionFrames >= 2  && usdGeometry.GetVelocitiesAttr().HasValue()
                 &&  primvarsApi.HasPrimvar(TfToken("accel"))) {
                 result = scene_rdl2::rdl2::MotionBlurType::ACCELERATION;
             }
