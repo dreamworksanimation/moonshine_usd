@@ -366,6 +366,10 @@ createMesh(const scene_rdl2::rdl2::Geometry *rdlGeometry,
     }
     LayerAssignmentId layerAssignmentId(std::move(faceAssignmentIds));
 
+    if (!layerAssignmentId.hasValidAssignment()) {
+        return nullptr;
+    }
+
     const scene_rdl2::rdl2::Geometry::SideType sideType = rdlGeometry->getSideType();
     bool usdDoubleSided;
     mesh.GetDoubleSidedAttr().Get(&usdDoubleSided, currentFrame);

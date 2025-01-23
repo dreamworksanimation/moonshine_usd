@@ -218,6 +218,10 @@ createPoints(const scene_rdl2::rdl2::Geometry *rdlGeometry,
     moonray::geom::LayerAssignmentId layerAssignmentId =
         moonray::geom::LayerAssignmentId(assignmentId);
 
+    if (!layerAssignmentId.hasValidAssignment()) {
+        return nullptr;
+    }
+
     VertexBuffer<Vec3fa, InterleavedTraits> vertices =
         getVertices<UsdGeomPoints>(rdlGeometry,
                                    points,

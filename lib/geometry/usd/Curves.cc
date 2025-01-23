@@ -282,6 +282,10 @@ createCurves(const scene_rdl2::rdl2::Geometry *rdlGeometry,
     moonray::geom::LayerAssignmentId layerAssignmentId =
         moonray::geom::LayerAssignmentId(assignmentId);
 
+    if (!layerAssignmentId.hasValidAssignment()) {
+        return nullptr;
+    }
+
     moonray::geom::Curves::Type curvesType = getCurvesType(curves);
     if (curvesType == Curves::Type::UNKNOWN) {
         rdlGeometry->warn("Curves primitive ", curvesName,
