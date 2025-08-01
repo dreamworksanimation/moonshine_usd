@@ -3,7 +3,7 @@
 
 moonray_dso_simple(UsdInstanceGeometry
     DEPENDENCIES
-        Moonray::rendering_bvh_shading
+        Moonray::rendering_shading
         ${PROJECT_NAME}::geometry_usd
         SceneRdl2::common_platform
         SceneRdl2::scene_rdl2

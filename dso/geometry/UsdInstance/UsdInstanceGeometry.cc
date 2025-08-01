@@ -9,7 +9,7 @@
 
 #include <moonshine_usd/geometry/usd/Usd.h>
 
-#include <moonray/rendering/bvh/shading/AttributeKey.h>
+#include <moonray/rendering/shading/AttributeKey.h>
 #include <moonray/rendering/geom/Api.h>
 #include <moonray/rendering/geom/ProceduralLeaf.h>
 #include <scene_rdl2/scene/rdl2/rdl2.h>
