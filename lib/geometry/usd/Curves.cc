@@ -239,6 +239,83 @@ addScatterTag(const scene_rdl2::rdl2::Geometry *rdlGeometry,
     }
 }
 
+void
+addNormals(const UsdGeomBasisCurves& curves,  
+           PrimitiveAttributeTable& table,
+           const std::vector<float>& motionFrames,
+           const scene_rdl2::rdl2::Geometry *rdlGeometry)
+{
+    // early out if there is no normal info in curves
+    if (!curves.GetNormalsAttr().IsAuthored()) {
+        return;
+    }
+
+    // Get Attribute Rate
+    std::vector<std::vector<Vec3f>> normals(motionFrames.size());
+    const TfToken normalsInterpolation = curves.GetNormalsInterpolation();
+    AttributeRate attrRate = RATE_UNKNOWN;
+    if (normalsInterpolation == UsdGeomTokens->vertex) {
+        attrRate = RATE_VERTEX;
+    } else if (normalsInterpolation == UsdGeomTokens->varying) {
+        attrRate = RATE_VARYING;
+    } else if (normalsInterpolation == UsdGeomTokens->uniform) {
+        attrRate = RATE_UNIFORM;
+    } else {
+        rdlGeometry->warn("Unknown rate for normals");
+        return;
+    }
+
+    // Extract normals for each motion frame
+    for (size_t i = 0; i < motionFrames.size(); ++i) {
+        VtArray<GfVec3f> usdNormals;
+        curves.GetNormalsAttr().Get(&usdNormals, motionFrames[i]);
+        VtArray<int> curveVertexCounts;
+        curves.GetCurveVertexCountsAttr().Get(&curveVertexCounts, motionFrames[i]);
+        const uint32_t curveCount = curveVertexCounts.size();
+        uint32_t vertexCount = 0;
+        for (auto v : curveVertexCounts) vertexCount += v;
+        
+        bool valid = false;
+        if ((attrRate == RATE_VERTEX || attrRate == RATE_VARYING) && usdNormals.size() == vertexCount) {
+            valid = true;
+            normals[i].reserve(vertexCount);
+            for (uint32_t vId = 0; vId < vertexCount; ++vId) {
+                normals[i].emplace_back(
+                    usdNormals[vId][0],
+                    usdNormals[vId][1],
+                    usdNormals[vId][2]);
+            }
+        } else if (attrRate == RATE_UNIFORM && usdNormals.size() == curveCount) {
+            valid = true;
+            normals[i].reserve(curveCount);
+            for (uint32_t cIdx = 0; cIdx < curveCount; ++cIdx) {
+                normals[i].emplace_back(
+                    usdNormals[cIdx][0],
+                    usdNormals[cIdx][1],
+                    usdNormals[cIdx][2]);
+            }
+        } else {
+            rdlGeometry->warn("Normals count does not match expected count for interpolation type on curve: ", curves.GetPrim().GetName().GetString());
+        }
+        if (!valid) {
+            normals[i].clear();
+        }
+    }
+    
+    // Only add normals if all motion frames are valid
+    bool allValid = true;
+    for (const auto& n : normals) {
+        if (n.empty()) {
+            allValid = false;
+            break;
+        }
+    }
+    if (allValid) {
+        table.addAttribute(StandardAttributes::sNormal, attrRate, std::move(normals));
+    }
+}
+
+
 
 } // end anonymous namespace
 
@@ -269,6 +346,9 @@ createCurves(const scene_rdl2::rdl2::Geometry *rdlGeometry,
                                               currentFrame);
 
     PrimitiveAttributeTable primitiveAttributeTable;
+
+    // Add normals if present
+    addNormals(curves, primitiveAttributeTable, motionFrames, rdlGeometry);
 
     const std::string curvesName = curves.GetPrim().GetName();
     int assignmentId;
