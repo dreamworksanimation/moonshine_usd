@@ -130,8 +130,7 @@ setStaticPrimvar(const UsdGeomPrimvar& primvar,
     } else if (attrRate == RATE_UNIFORM) {
         VtArray<UsdType> data;
         if (primvar.Get(&data, frame)) {
-            result.reserve(data.size());
-            std::copy(std::begin(data), std::end(data), std::begin(result));
+            result.assign(std::begin(data), std::end(data));
         }
     } else {
         MNRY_ASSERT(false, "static primitive attribute only support"
